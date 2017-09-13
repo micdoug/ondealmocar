@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Lista de funcionários</title>
+    <link rel="stylesheet" href="/libs/materialize/css/materialize.min.css" />
+    <style>
+        select {
+            display: block;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">Onde almoçar</a>
+        <ul class="right hide-on-med-and-down">
+            <li class="active"><a href="/">Votação</a></li>
+            <li><a href="/funcionarios">Funcionários</a></li>
+            <li><a href="/restaurantes">Restaurantes</a></li>
+        </ul>
+
+        <ul id="nav-mobile" class="side-nav">
+            <li><a href="/">Onde almoçar</a></li>
+        </ul>
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+</nav>
+<div class="section no-pad-bot" id="app">
+    <div class="container">
+        <br/><br/>
+
+        <div>
+            <a class="waves-effect waves-light btn modal-trigger" href="#modalVotar">Votar</a>
+            <a class="waves-effect waves-light btn modal-trigger" v-on:click="search">Atualizar</a>
+        </div>
+
+        <h3>Restaurantes escolhidos nesta semana</h3>
+
+        <table v-if="!loading" class="centered">
+            <thead>
+            <tr>
+                <th>Restaurante</th>
+                <th>Endereço</th>
+                <th>Número de Votos</th>
+                <th>Data</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-if="votacoes.length == 0">
+                <td colspan="4">Ainda não existem votações nesta semana.</td>
+            </tr>
+            <tr v-for="votacao in votacoes">
+                <td>{{ votacao.restaurante.nome }}</td>
+                <td>{{ votacao.restaurante.endereco }}</td>
+                <td>{{ votacao.numeroVotos }}</td>
+                <td>
+                    {{ votacao.data.dayOfMonth }} /
+                    {{ votacao.data.monthValue }} /
+                    {{ votacao.data.year }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div v-if="loading" class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+        </div>
+
+        <br/><br/>
+
+    </div>
+
+    <div id="modalVotar" class="modal modal-fixed-footer">
+        <form v-on:submit="votar">
+            <div class="modal-content">
+                <h4>Votar</h4>
+                <p>Informe o funcionário que irá votar e o restaurante escolhido:</p>
+                <div class="row">
+
+                    <div>
+                        <label>Funcionário</label>
+                        <select id="selFuncionario" v-model="selFuncionario">
+                            <option v-for="funcionario in funcionarios" v-bind:value="funcionario.id">
+                                {{ funcionario.nome }}
+                            </option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Restaurante</label>
+                        <select id="selRestaurante" v-model="selRestaurante">
+                            <option v-for="restaurante in restaurantes" v-bind:value="restaurante.id">
+                                {{ restaurante.nome }}
+                            </option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat ">Cancelar</a>
+                <button type="submit" class="modal-action waves-effect waves-green btn-flat ">Salvar</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+<script src="/libs/jquery/js/jquery-3.2.1.min.js"></script>
+<script src="/libs/underscore/js/underscore-min.js"></script>
+<script src="/libs/materialize/js/materialize.min.js"></script>
+<script src="/libs/vue/js/vue.min.js"></script>
+<script src="/libs/vue/js/vue-resource.min.js"></script>
+<script src="/js/home.js"></script>
+</body>
+</html>
